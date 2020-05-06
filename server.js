@@ -17,8 +17,11 @@ app.use(express.json());
 // HTML directory
 // =============================================================
 const HTML_DIR = path.resolve(__dirname, "public");
+const DB_DIR = path.resolve(__dirname, "db");
 const indexPath = path.join(HTML_DIR, "index.html");
 const notesPath = path.join(HTML_DIR, "notes.html");
+const dbPath = path.join(DB_DIR, "db.json");
+
 
 // HTML routes
 // =============================================================
@@ -27,7 +30,12 @@ app.get("/notes", (req, res) => { res.sendFile(notesPath) });
 
 // API routes
 // =============================================================
-app.get("/api/notes", (req, res) => { });
+app.get("/api/notes", (req, res) => {
+    fs.readFile(dbPath, "utf8", (err, data) => {
+        if (err) { throw err }
+        else { return res.json(data) };
+    });
+});
 app.post("/api/notes", (req, res) => { });
 app.delete("/api/notes/:id", (req, res) => { });
 
