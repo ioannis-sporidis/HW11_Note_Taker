@@ -21,6 +21,7 @@ const DB_DIR = path.resolve(__dirname, "db");
 const indexPath = path.join(HTML_DIR, "index.html");
 const notesPath = path.join(HTML_DIR, "notes.html");
 const dbPath = path.join(DB_DIR, "db.json");
+// console.log(dbPath);
 
 
 // HTML routes
@@ -30,17 +31,29 @@ app.get("/notes", (req, res) => { res.sendFile(notesPath) });
 
 // API routes
 // =============================================================
+// Reading data from db.json and storing it as a variable:
+const data = fs.readFileSync(dbPath, "utf8");
+const savedNotes = JSON.parse(data);
+
+// Returns all saved notes as json:
 app.get("/api/notes", (req, res) => {
-    fs.readFile(dbPath, "utf8", (err, data) => {
-        if (err) { throw err }
-        else { return res.json(data) };
-    });
+    return res.json(savedNotes);
+})
+
+// Receives a new note, adds it to the db.json and returns it to the client.
+app.post("/api/notes", (req, res) => {
+    const newNote = req.body;
+    savedNotes.push(newNote)
+    console.log(savedNotes);
+    const newData = JSON.stringify(savedNotes, null, 2);
+    fs.writeFile(dbPath, newData, (err) => { if (err) { throw err } });
+    res.json(newData);
 });
-app.post("/api/notes", (req, res) => { });
+
 app.delete("/api/notes/:id", (req, res) => { });
 
 // Listener
 // =============================================================
-app.listen(PORT, function () {
+app.listen(PORT, () => {
     console.log("App listening on PORT " + PORT);
 });
