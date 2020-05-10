@@ -1,11 +1,12 @@
 {
   "name": "note-taker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Take, view and delete notes",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "server.js"
+    "watch": "server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
